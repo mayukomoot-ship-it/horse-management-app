@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>競走馬管理</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f5f7f6;
+  color: #26332f;
+}
+
+header {
+  background: #126653;
+  color: white;
+  padding: 18px;
+  font-size: 21px;
+  font-weight: bold;
+}
+
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 16px;
+}
+
+.card {
+  background: white;
+  padding: 16px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+
+button {
+  border: none;
+  border-radius: 9px;
+  padding: 11px 15px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.primary {
+  background: #13745e;
+  color: white;
+}
+
+.secondary {
+  background: #e8efec;
+  color: #174c40;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 11px;
+  margin-top: 5px;
+  margin-bottom: 13px;
+  border: 1px solid #ccd5d1;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+label {
+  font-weight: 600;
+}
+
+.horse {
+  cursor: pointer;
+}
+
+.horse h3 {
+  margin: 0 0 6px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.feed-grid {
+  display: grid;
+  grid-template-columns: 65px 1fr;
+  gap: 8px;
+  align-items: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.status {
+  font-size: 13px;
+  color: #60716b;
+}
+
+.record {
+  border-left: 4px solid #13745e;
+  padding-left: 12px;
+  margin: 15px 0;
+}
+
+.back {
+  margin-bottom: 12px;
+}
+
+h2 {
+  margin-top: 5px;
+}
+
+.big-name {
+  font-size: 25px;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<header>🐴 競走馬管理</header>
+
+<div class="container">
+
+<!-- 馬一覧 -->
+<section id="listPage">
+  <button class="primary" onclick="showAdd()">＋ 新規入厩</button>
+
+  <h2>馬一覧</h2>
+
+  <div id="horseList"></div>
+</section>
+
+
+<!-- 新規登録 -->
+<section id="addPage" class="hidden">
+
+  <button class="secondary back" onclick="showList()">← 戻る</button>
+
+  <div class="card">
+    <h2>新規入厩登録</h2>
+
+    <label>馬名</label>
+    <input id="horseName">
+
+    <label>入厩日</label>
+    <input id="arrivalDate" type="date">
+
+    <label>入厩時体重（kg）</label>
+    <input id="arrivalWeight" type="number">
+
+    <button class="primary" onclick="addHorse()">登録する</button>
+  </div>
+
+</section>
+
+
+<!-- 馬詳細 -->
+<section id="horsePage" class="hidden">
+
+  <button class="secondary back" onclick="showList()">← 馬一覧</button>
+
+  <div class="card">
+    <div id="horseTitle" class="big-name"></div>
+    <div id="horseInfo" class="status"></div>
+  </div>
+
+  <div class="card">
+
+    <h2>今日の記録</h2>
+
+    <label>日付</label>
+    <input id="recordDate" type="date">
+
+    <h3>🍚 飼料の量</h3>
+
+    <div class="feed-grid">
+      <span>朝</span>
+      <input id="feedMorning" type="number" step="0.1" placeholder="kg">
+
+      <span>昼</span>
+      <input id="feedNoon" type="number" step="0.1" placeholder="kg">
+
+      <span>夕</span>
+      <input id="feedEvening" type="number" step="0.1" placeholder="kg">
+
+      <span>夜</span>
+      <input id="feedNight" type="number" step="0.1" placeholder="kg">
+    </div>
+
+    <label>🏇 運動内容</label>
+    <textarea id="exercise" placeholder="例：騎乗40分、ウォーキングマシーン30分"></textarea>
+
+    <label>🩺 その他状態</label>
+    <textarea id="condition" placeholder="例：飼い食い良好、脚元問題なし"></textarea>
+
+    <label>📝 メモ</label>
+    <textarea id="memo"></textarea>
+
+    <button class="primary" onclick="saveRecord()">今日の記録を保存</button>
+
+  </div>
+
+  <div class="card">
+    <h2>過去の記録</h2>
+    <div id="history"></div>
+  </div>
+
+</section>
+
+</div>
+
+<script>
+
+let horses = JSON.parse(localStorage.getItem("horses")) || [];
+let selectedHorse = null;
+
+function saveData(){
+  localStorage.setItem("horses", JSON.stringify(horses));
+}
+
+function hideAll(){
+  document.getElementById("listPage").classList.add("hidden");
+  document.getElementById("addPage").classList.add("hidden");
+  document.getElementById("horsePage").classList.add("hidden");
+}
+
+function showList(){
+  hideAll();
+  document.getElementById("listPage").classList.remove("hidden");
+  renderHorses();
+}
+
+function showAdd(){
+  hideAll();
+  document.getElementById("addPage").classList.remove("hidden");
+}
+
+function addHorse(){
+
+  const name = document.getElementById("horseName").value.trim();
+  const arrivalDate = document.getElementById("arrivalDate").value;
+  const weight = document.getElementById("arrivalWeight").value;
+
+  if(!name){
+    alert("馬名を入力してください");
+    return;
+  }
+
+  horses.push({
+    id: Date.now(),
+    name,
+    arrivalDate,
+    weight,
+    records:[]
+  });
+
+  saveData();
+
+  document.getElementById("horseName").value="";
+  document.getElementById("arrivalDate").value="";
+  document.getElementById("arrivalWeight").value="";
+
+  showList();
+}
+
+function renderHorses(){
+
+  const list = document.getElementById("horseList");
+  list.innerHTML="";
+
+  if(horses.length === 0){
+    list.innerHTML='<div class="card">まだ馬が登録されていません。</div>';
+    return;
+  }
+
+  horses.forEach(horse => {
+
+    const div=document.createElement("div");
+    div.className="card horse";
+
+    div.innerHTML=`
+      <h3>🐴 ${horse.name}</h3>
+      <div class="status">
+      入厩日：${horse.arrivalDate || "未入力"}<br>
+      入厩時体重：${horse.weight || "未入力"} kg
+      </div>
+    `;
+
+    div.onclick=()=>openHorse(horse.id);
+
+    list.appendChild(div);
+  });
+}
+
+function openHorse(id){
+
+  selectedHorse=id;
+
+  const horse=horses.find(h=>h.id===id);
+
+  hideAll();
+  document.getElementById("horsePage").classList.remove("hidden");
+
+  document.getElementById("horseTitle").textContent="🐴 "+horse.name;
+
+  document.getElementById("horseInfo").innerHTML=
+    `入厩日：${horse.arrivalDate || "未入力"}　
+     入厩時体重：${horse.weight || "未入力"}kg`;
+
+  document.getElementById("recordDate").value =
+    new Date().toISOString().split("T")[0];
+
+  renderHistory();
+}
+
+function saveRecord(){
+
+  const horse=horses.find(h=>h.id===selectedHorse);
+
+  const record={
+    date:document.getElementById("recordDate").value,
+    morning:document.getElementById("feedMorning").value,
+    noon:document.getElementById("feedNoon").value,
+    evening:document.getElementById("feedEvening").value,
+    night:document.getElementById("feedNight").value,
+    exercise:document.getElementById("exercise").value,
+    condition:document.getElementById("condition").value,
+    memo:document.getElementById("memo").value
+  };
+
+  horse.records.push(record);
+
+  saveData();
+
+  clearRecordForm();
+  renderHistory();
+
+  alert("保存しました");
+}
+
+function clearRecordForm(){
+
+  document.getElementById("feedMorning").value="";
+  document.getElementById("feedNoon").value="";
+  document.getElementById("feedEvening").value="";
+  document.getElementById("feedNight").value="";
+  document.getElementById("exercise").value="";
+  document.getElementById("condition").value="";
+  document.getElementById("memo").value="";
+}
+
+function renderHistory(){
+
+  const horse=horses.find(h=>h.id===selectedHorse);
+  const history=document.getElementById("history");
+
+  history.innerHTML="";
+
+  if(horse.records.length===0){
+    history.innerHTML="まだ記録がありません。";
+    return;
+  }
+
+  [...horse.records].reverse().forEach(r=>{
+
+    const div=document.createElement("div");
+    div.className="record";
+
+    div.innerHTML=`
+      <strong>${r.date}</strong><br><br>
+
+      🍚 朝 ${r.morning || "-"}kg　
+      昼 ${r.noon || "-"}kg　
+      夕 ${r.evening || "-"}kg　
+      夜 ${r.night || "-"}kg<br>
+
+      🏇 ${r.exercise || "記録なし"}<br>
+      🩺 ${r.condition || "記録なし"}<br>
+      📝 ${r.memo || "なし"}
+    `;
+
+    history.appendChild(div);
+  });
+}
+
+renderHorses();
+
+</script>
+
+</body>
+</html>
