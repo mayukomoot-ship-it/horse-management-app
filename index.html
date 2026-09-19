@@ -3,157 +3,271 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#126653">
 <title>競走馬管理</title>
 
 <style>
-* { box-sizing: border-box; }
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;
+  background:#f4f7f5;
+  color:#26332f;
+}
+header{
+  background:linear-gradient(135deg,#126653,#0e7961);
+  color:white;
+  padding:18px 20px;
+}
+.header-inner{
+  max-width:760px;
+  margin:auto;
+}
+header h1{margin:0;font-size:23px}
+header small{opacity:.85}
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f5f7f6;
-  color: #26332f;
+.container{
+  max-width:760px;
+  margin:auto;
+  padding:16px;
+}
+.card{
+  background:white;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:0 3px 12px rgba(0,0,0,.06);
+}
+button{
+  border:0;
+  border-radius:10px;
+  padding:11px 16px;
+  font-size:15px;
+  cursor:pointer;
+}
+.primary{background:#14745e;color:white}
+.secondary{background:#e9f1ee;color:#155747}
+.danger{background:#fff0f0;color:#b33434}
+.full{width:100%}
+.hidden{display:none!important}
+
+input,textarea,select{
+  width:100%;
+  border:1px solid #ced8d4;
+  border-radius:10px;
+  padding:11px;
+  margin:6px 0 14px;
+  font-size:16px;
+  background:white;
+}
+textarea{min-height:90px;resize:vertical}
+label{font-weight:650;font-size:14px}
+
+.top-actions{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:15px;
+}
+.horse-card{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  cursor:pointer;
+}
+.horse-photo{
+  width:82px;
+  height:82px;
+  border-radius:13px;
+  object-fit:cover;
+  background:#e7eeeb;
+  flex-shrink:0;
+}
+.placeholder{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:36px;
+}
+.horse-info{flex:1}
+.horse-name{
+  font-size:20px;
+  font-weight:750;
+  margin-bottom:7px;
+}
+.sub{
+  color:#697a74;
+  font-size:14px;
+  line-height:1.6;
+}
+.arrow{
+  font-size:25px;
+  color:#8b9994;
+}
+.profile{
+  display:flex;
+  gap:15px;
+  align-items:flex-start;
+}
+.profile .horse-photo{
+  width:120px;
+  height:120px;
+}
+.profile-name{
+  font-size:24px;
+  font-weight:750;
+  margin-bottom:8px;
 }
 
-header {
-  background: #126653;
-  color: white;
-  padding: 18px;
-  font-size: 21px;
-  font-weight: bold;
+.tabs{
+  display:flex;
+  overflow-x:auto;
+  gap:7px;
+  margin:15px 0;
+  padding-bottom:3px;
+}
+.tab{
+  white-space:nowrap;
+  background:#e8efec;
+  color:#3c514a;
+  padding:9px 13px;
+}
+.tab.active{
+  background:#14745e;
+  color:white;
 }
 
-.container {
-  max-width: 700px;
-  margin: auto;
-  padding: 16px;
+.section-title{
+  font-size:18px;
+  font-weight:750;
+  margin:4px 0 14px;
+}
+.record{
+  padding:14px 0;
+  border-bottom:1px solid #e4e9e7;
+}
+.record:last-child{border-bottom:0}
+.record-date{
+  font-weight:750;
+  margin-bottom:7px;
+}
+.record-line{
+  margin:5px 0;
+  line-height:1.5;
 }
 
-.card {
-  background: white;
-  padding: 16px;
-  margin-bottom: 14px;
-  border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+.health-photo-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
 }
-
-button {
-  border: none;
-  border-radius: 9px;
-  padding: 11px 15px;
-  cursor: pointer;
-  font-size: 15px;
+.health-photo{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border-radius:10px;
+  cursor:pointer;
 }
-
-.primary {
-  background: #13745e;
-  color: white;
+.photo-button{
+  display:block;
+  text-align:center;
+  border:2px dashed #b7c8c1;
+  border-radius:12px;
+  padding:20px 10px;
+  color:#487166;
+  cursor:pointer;
+  margin-bottom:15px;
 }
+.photo-button input{display:none}
 
-.secondary {
-  background: #e8efec;
-  color: #174c40;
+.weight-box{
+  background:#edf7f3;
+  border-radius:13px;
+  padding:14px;
+  margin-bottom:15px;
 }
-
-input, textarea, select {
-  width: 100%;
-  padding: 11px;
-  margin-top: 5px;
-  margin-bottom: 13px;
-  border: 1px solid #ccd5d1;
-  border-radius: 8px;
-  font-size: 16px;
+.weight-big{
+  font-size:30px;
+  font-weight:750;
+  color:#126653;
 }
-
-label {
-  font-weight: 600;
+canvas{
+  width:100%;
+  max-width:100%;
+  background:white;
+  border-radius:10px;
 }
-
-.horse {
-  cursor: pointer;
+.empty{
+  color:#788983;
+  text-align:center;
+  padding:20px;
 }
+.back{margin-bottom:12px}
 
-.horse h3 {
-  margin: 0 0 6px;
-}
-
-.row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.feed-grid {
-  display: grid;
-  grid-template-columns: 65px 1fr;
-  gap: 8px;
-  align-items: center;
-}
-
-.hidden {
-  display: none;
-}
-
-.status {
-  font-size: 13px;
-  color: #60716b;
-}
-
-.record {
-  border-left: 4px solid #13745e;
-  padding-left: 12px;
-  margin: 15px 0;
-}
-
-.back {
-  margin-bottom: 12px;
-}
-
-h2 {
-  margin-top: 5px;
-}
-
-.big-name {
-  font-size: 25px;
-  font-weight: bold;
+@media(max-width:520px){
+  .container{padding:12px}
+  .profile{display:block}
+  .profile .horse-photo{
+    width:100%;
+    height:220px;
+    margin-bottom:13px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<header>🐴 競走馬管理</header>
+<header>
+  <div class="header-inner">
+    <h1>🐴 競走馬管理</h1>
+    <small>Horse Management</small>
+  </div>
+</header>
 
 <div class="container">
 
 <!-- 馬一覧 -->
 <section id="listPage">
-  <button class="primary" onclick="showAdd()">＋ 新規入厩</button>
 
-  <h2>馬一覧</h2>
+  <div class="top-actions">
+    <h2>馬一覧</h2>
+    <button class="primary" onclick="showAdd()">＋ 新規入厩</button>
+  </div>
 
   <div id="horseList"></div>
+
 </section>
 
 
-<!-- 新規登録 -->
+<!-- 新規入厩 -->
 <section id="addPage" class="hidden">
 
-  <button class="secondary back" onclick="showList()">← 戻る</button>
+  <button class="secondary back" onclick="showList()">← 馬一覧</button>
 
   <div class="card">
-    <h2>新規入厩登録</h2>
+    <div class="section-title">新規入厩登録</div>
 
-    <label>馬名</label>
-    <input id="horseName">
+    <label>馬名 *</label>
+    <input id="newName" placeholder="馬名">
 
-    <label>入厩日</label>
-    <input id="arrivalDate" type="date">
+    <label>入厩日 *</label>
+    <input id="newArrival" type="date">
 
     <label>入厩時体重（kg）</label>
-    <input id="arrivalWeight" type="number">
+    <input id="newWeight" type="number" step="0.1">
 
-    <button class="primary" onclick="addHorse()">登録する</button>
+    <label>馬の写真</label>
+    <label class="photo-button">
+      📷 写真を選択
+      <input id="newPhoto" type="file" accept="image/*">
+    </label>
+
+    <label>備考</label>
+    <textarea id="newNote" placeholder="受入元など"></textarea>
+
+    <button class="primary full" onclick="addHorse()">登録する</button>
   </div>
 
 </section>
@@ -165,49 +279,143 @@ h2 {
   <button class="secondary back" onclick="showList()">← 馬一覧</button>
 
   <div class="card">
-    <div id="horseTitle" class="big-name"></div>
-    <div id="horseInfo" class="status"></div>
+    <div class="profile">
+
+      <div id="profilePhotoWrap"></div>
+
+      <div>
+        <div id="profileName" class="profile-name"></div>
+        <div id="profileInfo" class="sub"></div>
+      </div>
+
+    </div>
   </div>
 
-  <div class="card">
+  <div class="tabs">
+    <button class="tab active" id="tabDaily" onclick="openTab('daily')">日々の記録</button>
+    <button class="tab" id="tabWeight" onclick="openTab('weight')">体重</button>
+    <button class="tab" id="tabHealth" onclick="openTab('health')">健康手帳</button>
+    <button class="tab" id="tabBasic" onclick="openTab('basic')">基本情報</button>
+  </div>
 
-    <h2>今日の記録</h2>
 
-    <label>日付</label>
-    <input id="recordDate" type="date">
+  <!-- 日々の記録 -->
+  <div id="dailyTab">
 
-    <h3>🍚 飼料の量</h3>
+    <div class="card">
+      <div class="section-title">今日の記録</div>
 
-    <div class="feed-grid">
-      <span>朝</span>
-      <input id="feedMorning" type="number" step="0.1" placeholder="kg">
+      <label>日付</label>
+      <input id="recordDate" type="date">
 
-      <span>昼</span>
-      <input id="feedNoon" type="number" step="0.1" placeholder="kg">
+      <label>⚖️ 体重（kg）</label>
+      <input id="dailyWeight" type="number" step="0.1" placeholder="例：482">
 
-      <span>夕</span>
-      <input id="feedEvening" type="number" step="0.1" placeholder="kg">
+      <label>🏇 運動内容</label>
+      <textarea id="exercise"
+        placeholder="例：騎乗40分、ウォーキングマシーン30分"></textarea>
 
-      <span>夜</span>
-      <input id="feedNight" type="number" step="0.1" placeholder="kg">
+      <label>❤️ その他の状態</label>
+      <textarea id="condition"
+        placeholder="例：飼い食い良好、脚元問題なし"></textarea>
+
+      <label>📝 メモ</label>
+      <textarea id="memo"
+        placeholder="明日の予定や申し送りなど"></textarea>
+
+      <button class="primary full" onclick="saveDaily()">保存する</button>
     </div>
 
-    <label>🏇 運動内容</label>
-    <textarea id="exercise" placeholder="例：騎乗40分、ウォーキングマシーン30分"></textarea>
-
-    <label>🩺 その他状態</label>
-    <textarea id="condition" placeholder="例：飼い食い良好、脚元問題なし"></textarea>
-
-    <label>📝 メモ</label>
-    <textarea id="memo"></textarea>
-
-    <button class="primary" onclick="saveRecord()">今日の記録を保存</button>
+    <div class="card">
+      <div class="section-title">過去の記録</div>
+      <div id="history"></div>
+    </div>
 
   </div>
 
-  <div class="card">
-    <h2>過去の記録</h2>
-    <div id="history"></div>
+
+  <!-- 体重 -->
+  <div id="weightTab" class="hidden">
+
+    <div class="card">
+
+      <div class="section-title">体重の推移</div>
+
+      <div class="weight-box">
+        <div class="sub">最新体重</div>
+        <div id="latestWeight" class="weight-big">―</div>
+      </div>
+
+      <canvas id="weightChart" height="230"></canvas>
+
+      <div id="weightHistory"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- 健康手帳 -->
+  <div id="healthTab" class="hidden">
+
+    <div class="card">
+
+      <div class="section-title">📕 健康手帳</div>
+
+      <p class="sub">
+        健康手帳や予防接種記録などを写真で保存できます。
+      </p>
+
+      <label class="photo-button">
+        ＋ 健康手帳の写真を追加
+        <input
+          id="healthPhotoInput"
+          type="file"
+          accept="image/*"
+          multiple
+          onchange="addHealthPhotos(event)">
+      </label>
+
+      <div id="healthPhotos" class="health-photo-grid"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- 基本情報 -->
+  <div id="basicTab" class="hidden">
+
+    <div class="card">
+
+      <div class="section-title">基本情報</div>
+
+      <label>馬名</label>
+      <input id="editName">
+
+      <label>入厩日</label>
+      <input id="editArrival" type="date">
+
+      <label>入厩時体重（kg）</label>
+      <input id="editArrivalWeight" type="number" step="0.1">
+
+      <label>馬の写真</label>
+      <label class="photo-button">
+        📷 写真を変更
+        <input id="editPhoto" type="file" accept="image/*">
+      </label>
+
+      <label>備考</label>
+      <textarea id="editNote"></textarea>
+
+      <button class="primary full" onclick="saveBasic()">変更を保存</button>
+
+      <br><br>
+
+      <button class="danger full" onclick="deleteHorse()">この馬を削除</button>
+
+    </div>
+
   </div>
 
 </section>
@@ -216,176 +424,651 @@ h2 {
 
 <script>
 
-let horses = JSON.parse(localStorage.getItem("horses")) || [];
-let selectedHorse = null;
+let horses = JSON.parse(localStorage.getItem("horseAppData")) || [];
+let selectedHorseId = null;
 
 function saveData(){
-  localStorage.setItem("horses", JSON.stringify(horses));
+  try{
+    localStorage.setItem("horseAppData",JSON.stringify(horses));
+  }catch(e){
+    alert("保存容量がいっぱいになりました。写真を減らしてください。");
+  }
 }
 
-function hideAll(){
-  document.getElementById("listPage").classList.add("hidden");
-  document.getElementById("addPage").classList.add("hidden");
-  document.getElementById("horsePage").classList.add("hidden");
+function today(){
+  const d=new Date();
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,"0");
+  const day=String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+}
+
+function hidePages(){
+  listPage.classList.add("hidden");
+  addPage.classList.add("hidden");
+  horsePage.classList.add("hidden");
 }
 
 function showList(){
-  hideAll();
-  document.getElementById("listPage").classList.remove("hidden");
+  hidePages();
+  listPage.classList.remove("hidden");
   renderHorses();
 }
 
 function showAdd(){
-  hideAll();
-  document.getElementById("addPage").classList.remove("hidden");
+  hidePages();
+  addPage.classList.remove("hidden");
+  newArrival.value=today();
 }
 
-function addHorse(){
+function currentHorse(){
+  return horses.find(h=>h.id===selectedHorseId);
+}
 
-  const name = document.getElementById("horseName").value.trim();
-  const arrivalDate = document.getElementById("arrivalDate").value;
-  const weight = document.getElementById("arrivalWeight").value;
+async function compressImage(file,maxWidth=900,quality=.72){
+
+  return new Promise((resolve,reject)=>{
+
+    const reader=new FileReader();
+
+    reader.onload=e=>{
+
+      const img=new Image();
+
+      img.onload=()=>{
+
+        let width=img.width;
+        let height=img.height;
+
+        if(width>maxWidth){
+          height=Math.round(height*(maxWidth/width));
+          width=maxWidth;
+        }
+
+        const canvas=document.createElement("canvas");
+        canvas.width=width;
+        canvas.height=height;
+
+        const ctx=canvas.getContext("2d");
+        ctx.drawImage(img,0,0,width,height);
+
+        resolve(canvas.toDataURL("image/jpeg",quality));
+      };
+
+      img.onerror=reject;
+      img.src=e.target.result;
+    };
+
+    reader.onerror=reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function addHorse(){
+
+  const name=newName.value.trim();
 
   if(!name){
     alert("馬名を入力してください");
     return;
   }
 
-  horses.push({
-    id: Date.now(),
-    name,
-    arrivalDate,
-    weight,
-    records:[]
-  });
+  let photo="";
 
+  if(newPhoto.files[0]){
+    photo=await compressImage(newPhoto.files[0],700,.7);
+  }
+
+  const horse={
+    id:Date.now(),
+    name:name,
+    arrival:newArrival.value,
+    arrivalWeight:newWeight.value,
+    photo:photo,
+    note:newNote.value,
+    records:[],
+    healthPhotos:[]
+  };
+
+  horses.push(horse);
   saveData();
 
-  document.getElementById("horseName").value="";
-  document.getElementById("arrivalDate").value="";
-  document.getElementById("arrivalWeight").value="";
+  newName.value="";
+  newWeight.value="";
+  newPhoto.value="";
+  newNote.value="";
 
   showList();
 }
 
 function renderHorses(){
 
-  const list = document.getElementById("horseList");
-  list.innerHTML="";
+  horseList.innerHTML="";
 
-  if(horses.length === 0){
-    list.innerHTML='<div class="card">まだ馬が登録されていません。</div>';
+  if(!horses.length){
+    horseList.innerHTML=
+      '<div class="card empty">まだ馬が登録されていません。</div>';
     return;
   }
 
-  horses.forEach(horse => {
+  horses.forEach(horse=>{
+
+    const latest=getLatestWeight(horse);
 
     const div=document.createElement("div");
-    div.className="card horse";
+    div.className="card horse-card";
 
     div.innerHTML=`
-      <h3>🐴 ${horse.name}</h3>
-      <div class="status">
-      入厩日：${horse.arrivalDate || "未入力"}<br>
-      入厩時体重：${horse.weight || "未入力"} kg
+      ${
+        horse.photo
+        ? `<img class="horse-photo" src="${horse.photo}">`
+        : `<div class="horse-photo placeholder">🐴</div>`
+      }
+
+      <div class="horse-info">
+        <div class="horse-name">${escapeHtml(horse.name)}</div>
+
+        <div class="sub">
+          入厩日：${horse.arrival || "未入力"}<br>
+          ${
+            latest
+            ? `最新体重：${latest.weight} kg（${latest.date}）`
+            : `入厩時体重：${horse.arrivalWeight || "未入力"} kg`
+          }
+        </div>
       </div>
+
+      <div class="arrow">›</div>
     `;
 
     div.onclick=()=>openHorse(horse.id);
 
-    list.appendChild(div);
+    horseList.appendChild(div);
   });
 }
 
 function openHorse(id){
 
-  selectedHorse=id;
+  selectedHorseId=id;
 
-  const horse=horses.find(h=>h.id===id);
+  hidePages();
+  horsePage.classList.remove("hidden");
 
-  hideAll();
-  document.getElementById("horsePage").classList.remove("hidden");
+  recordDate.value=today();
 
-  document.getElementById("horseTitle").textContent="🐴 "+horse.name;
-
-  document.getElementById("horseInfo").innerHTML=
-    `入厩日：${horse.arrivalDate || "未入力"}　
-     入厩時体重：${horse.weight || "未入力"}kg`;
-
-  document.getElementById("recordDate").value =
-    new Date().toISOString().split("T")[0];
-
+  renderProfile();
   renderHistory();
+  loadBasic();
+
+  openTab("daily");
 }
 
-function saveRecord(){
+function renderProfile(){
 
-  const horse=horses.find(h=>h.id===selectedHorse);
+  const horse=currentHorse();
+
+  profileName.textContent=horse.name;
+
+  const latest=getLatestWeight(horse);
+
+  profileInfo.innerHTML=`
+    入厩日：${horse.arrival || "未入力"}<br>
+    入厩時体重：${horse.arrivalWeight || "未入力"} kg<br>
+    ${
+      latest
+      ? `最新体重：${latest.weight} kg（${latest.date}）`
+      : ""
+    }
+    ${
+      horse.note
+      ? `<br>備考：${escapeHtml(horse.note)}`
+      : ""
+    }
+  `;
+
+  profilePhotoWrap.innerHTML=
+    horse.photo
+    ? `<img class="horse-photo" src="${horse.photo}">`
+    : `<div class="horse-photo placeholder">🐴</div>`;
+}
+
+function saveDaily(){
+
+  const horse=currentHorse();
+
+  if(!recordDate.value){
+    alert("日付を入力してください");
+    return;
+  }
 
   const record={
-    date:document.getElementById("recordDate").value,
-    morning:document.getElementById("feedMorning").value,
-    noon:document.getElementById("feedNoon").value,
-    evening:document.getElementById("feedEvening").value,
-    night:document.getElementById("feedNight").value,
-    exercise:document.getElementById("exercise").value,
-    condition:document.getElementById("condition").value,
-    memo:document.getElementById("memo").value
+    id:Date.now(),
+    date:recordDate.value,
+    weight:dailyWeight.value,
+    exercise:exercise.value.trim(),
+    condition:condition.value.trim(),
+    memo:memo.value.trim()
   };
 
   horse.records.push(record);
 
+  horse.records.sort((a,b)=>a.date.localeCompare(b.date));
+
   saveData();
 
-  clearRecordForm();
+  dailyWeight.value="";
+  exercise.value="";
+  condition.value="";
+  memo.value="";
+
+  renderProfile();
   renderHistory();
 
   alert("保存しました");
 }
 
-function clearRecordForm(){
-
-  document.getElementById("feedMorning").value="";
-  document.getElementById("feedNoon").value="";
-  document.getElementById("feedEvening").value="";
-  document.getElementById("feedNight").value="";
-  document.getElementById("exercise").value="";
-  document.getElementById("condition").value="";
-  document.getElementById("memo").value="";
-}
-
 function renderHistory(){
 
-  const horse=horses.find(h=>h.id===selectedHorse);
-  const history=document.getElementById("history");
+  const horse=currentHorse();
 
   history.innerHTML="";
 
-  if(horse.records.length===0){
-    history.innerHTML="まだ記録がありません。";
+  if(!horse.records.length){
+    history.innerHTML='<div class="empty">まだ記録がありません。</div>';
     return;
   }
 
-  [...horse.records].reverse().forEach(r=>{
+  [...horse.records]
+    .sort((a,b)=>b.date.localeCompare(a.date))
+    .forEach(r=>{
 
-    const div=document.createElement("div");
-    div.className="record";
+      const div=document.createElement("div");
+      div.className="record";
 
-    div.innerHTML=`
-      <strong>${r.date}</strong><br><br>
+      div.innerHTML=`
+        <div class="record-date">${r.date}</div>
 
-      🍚 朝 ${r.morning || "-"}kg　
-      昼 ${r.noon || "-"}kg　
-      夕 ${r.evening || "-"}kg　
-      夜 ${r.night || "-"}kg<br>
+        ${
+          r.weight
+          ? `<div class="record-line">⚖️ ${r.weight} kg</div>`
+          : ""
+        }
 
-      🏇 ${r.exercise || "記録なし"}<br>
-      🩺 ${r.condition || "記録なし"}<br>
-      📝 ${r.memo || "なし"}
-    `;
+        ${
+          r.exercise
+          ? `<div class="record-line">🏇 ${escapeHtml(r.exercise)}</div>`
+          : ""
+        }
 
-    history.appendChild(div);
+        ${
+          r.condition
+          ? `<div class="record-line">❤️ ${escapeHtml(r.condition)}</div>`
+          : ""
+        }
+
+        ${
+          r.memo
+          ? `<div class="record-line">📝 ${escapeHtml(r.memo)}</div>`
+          : ""
+        }
+      `;
+
+      history.appendChild(div);
+    });
+}
+
+function getLatestWeight(horse){
+
+  const weights=horse.records
+    .filter(r=>r.weight)
+    .sort((a,b)=>b.date.localeCompare(a.date));
+
+  if(weights.length){
+    return weights[0];
+  }
+
+  if(horse.arrivalWeight){
+    return {
+      date:horse.arrival,
+      weight:horse.arrivalWeight
+    };
+  }
+
+  return null;
+}
+
+function openTab(tab){
+
+  dailyTab.classList.add("hidden");
+  weightTab.classList.add("hidden");
+  healthTab.classList.add("hidden");
+  basicTab.classList.add("hidden");
+
+  document.querySelectorAll(".tab")
+    .forEach(t=>t.classList.remove("active"));
+
+  if(tab==="daily"){
+    dailyTab.classList.remove("hidden");
+    tabDaily.classList.add("active");
+  }
+
+  if(tab==="weight"){
+    weightTab.classList.remove("hidden");
+    tabWeight.classList.add("active");
+    renderWeight();
+  }
+
+  if(tab==="health"){
+    healthTab.classList.remove("hidden");
+    tabHealth.classList.add("active");
+    renderHealthPhotos();
+  }
+
+  if(tab==="basic"){
+    basicTab.classList.remove("hidden");
+    tabBasic.classList.add("active");
+    loadBasic();
+  }
+}
+
+function renderWeight(){
+
+  const horse=currentHorse();
+
+  const data=[];
+
+  if(horse.arrivalWeight){
+    data.push({
+      date:horse.arrival,
+      weight:Number(horse.arrivalWeight)
+    });
+  }
+
+  horse.records
+    .filter(r=>r.weight)
+    .forEach(r=>{
+      data.push({
+        date:r.date,
+        weight:Number(r.weight)
+      });
+    });
+
+  data.sort((a,b)=>a.date.localeCompare(b.date));
+
+  if(!data.length){
+    latestWeight.textContent="―";
+    weightHistory.innerHTML=
+      '<div class="empty">体重記録がありません。</div>';
+    clearCanvas();
+    return;
+  }
+
+  const latest=data[data.length-1];
+
+  latestWeight.textContent=latest.weight+" kg";
+
+  weightHistory.innerHTML=
+    data.slice().reverse().map(d=>
+      `<div class="record">
+        <strong>${d.date}</strong>　${d.weight} kg
+      </div>`
+    ).join("");
+
+  drawWeightChart(data);
+}
+
+function clearCanvas(){
+  const canvas=weightChart;
+  const ctx=canvas.getContext("2d");
+  canvas.width=canvas.clientWidth*2;
+  canvas.height=230*2;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+function drawWeightChart(data){
+
+  const canvas=weightChart;
+  const ctx=canvas.getContext("2d");
+
+  const displayWidth=canvas.clientWidth;
+  const displayHeight=230;
+
+  canvas.width=displayWidth*2;
+  canvas.height=displayHeight*2;
+
+  ctx.scale(2,2);
+
+  ctx.clearRect(0,0,displayWidth,displayHeight);
+
+  const pad={
+    left:45,
+    right:15,
+    top:20,
+    bottom:40
+  };
+
+  const weights=data.map(d=>d.weight);
+
+  let min=Math.min(...weights);
+  let max=Math.max(...weights);
+
+  if(min===max){
+    min-=10;
+    max+=10;
+  }else{
+    min-=5;
+    max+=5;
+  }
+
+  const chartW=displayWidth-pad.left-pad.right;
+  const chartH=displayHeight-pad.top-pad.bottom;
+
+  ctx.strokeStyle="#d9e2de";
+  ctx.lineWidth=1;
+
+  for(let i=0;i<=4;i++){
+
+    const y=pad.top+(chartH/4)*i;
+
+    ctx.beginPath();
+    ctx.moveTo(pad.left,y);
+    ctx.lineTo(displayWidth-pad.right,y);
+    ctx.stroke();
+
+    const value=max-((max-min)/4)*i;
+
+    ctx.fillStyle="#71817b";
+    ctx.font="11px sans-serif";
+    ctx.fillText(
+      Math.round(value),
+      5,
+      y+4
+    );
+  }
+
+  const points=data.map((d,i)=>{
+
+    const x=
+      data.length===1
+      ? pad.left+chartW/2
+      : pad.left+(chartW/(data.length-1))*i;
+
+    const y=
+      pad.top+
+      chartH-
+      ((d.weight-min)/(max-min))*chartH;
+
+    return{x,y};
   });
+
+  ctx.strokeStyle="#14745e";
+  ctx.lineWidth=3;
+  ctx.beginPath();
+
+  points.forEach((p,i)=>{
+    if(i===0)ctx.moveTo(p.x,p.y);
+    else ctx.lineTo(p.x,p.y);
+  });
+
+  ctx.stroke();
+
+  points.forEach((p,i)=>{
+
+    ctx.fillStyle="#14745e";
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,4,0,Math.PI*2);
+    ctx.fill();
+
+    if(
+      i===0 ||
+      i===points.length-1 ||
+      points.length<=5
+    ){
+      ctx.fillStyle="#63746e";
+      ctx.font="10px sans-serif";
+      ctx.textAlign="center";
+
+      ctx.fillText(
+        data[i].date.slice(5).replace("-","/"),
+        p.x,
+        displayHeight-15
+      );
+    }
+  });
+}
+
+async function addHealthPhotos(event){
+
+  const horse=currentHorse();
+  const files=[...event.target.files];
+
+  for(const file of files){
+
+    try{
+      const image=await compressImage(file,1000,.68);
+
+      horse.healthPhotos.push({
+        id:Date.now()+Math.random(),
+        date:today(),
+        image:image
+      });
+
+    }catch(e){
+      alert("写真を読み込めませんでした");
+    }
+  }
+
+  saveData();
+  renderHealthPhotos();
+
+  event.target.value="";
+}
+
+function renderHealthPhotos(){
+
+  const horse=currentHorse();
+
+  healthPhotos.innerHTML="";
+
+  if(!horse.healthPhotos.length){
+    healthPhotos.innerHTML=
+      '<div class="empty" style="grid-column:1/-1">まだ写真がありません。</div>';
+    return;
+  }
+
+  [...horse.healthPhotos]
+    .reverse()
+    .forEach(p=>{
+
+      const img=document.createElement("img");
+
+      img.src=p.image;
+      img.className="health-photo";
+      img.title=p.date;
+
+      img.onclick=()=>{
+        const remove=confirm(
+          `${p.date} の写真です。\n\nこの写真を削除しますか？`
+        );
+
+        if(remove){
+          horse.healthPhotos=
+            horse.healthPhotos.filter(x=>x.id!==p.id);
+
+          saveData();
+          renderHealthPhotos();
+        }
+      };
+
+      healthPhotos.appendChild(img);
+    });
+}
+
+function loadBasic(){
+
+  const horse=currentHorse();
+
+  editName.value=horse.name;
+  editArrival.value=horse.arrival;
+  editArrivalWeight.value=horse.arrivalWeight;
+  editNote.value=horse.note || "";
+}
+
+async function saveBasic(){
+
+  const horse=currentHorse();
+
+  if(!editName.value.trim()){
+    alert("馬名を入力してください");
+    return;
+  }
+
+  horse.name=editName.value.trim();
+  horse.arrival=editArrival.value;
+  horse.arrivalWeight=editArrivalWeight.value;
+  horse.note=editNote.value;
+
+  if(editPhoto.files[0]){
+    horse.photo=
+      await compressImage(editPhoto.files[0],700,.7);
+
+    editPhoto.value="";
+  }
+
+  saveData();
+  renderProfile();
+
+  alert("基本情報を更新しました");
+}
+
+function deleteHorse(){
+
+  const horse=currentHorse();
+
+  if(!confirm(
+    `${horse.name} の登録と記録をすべて削除しますか？`
+  )){
+    return;
+  }
+
+  horses=horses.filter(h=>h.id!==selectedHorseId);
+
+  saveData();
+  selectedHorseId=null;
+
+  showList();
+}
+
+function escapeHtml(text){
+
+  if(!text)return "";
+
+  return String(text)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
 renderHorses();
